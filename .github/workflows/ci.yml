@@ -21,6 +21,9 @@ jobs:
 
       - name: Build Docker image
         run: make build
+        env:
+          DOCKER_USERNAME: mggk
+          APPLICATION_NAME: nginx-directory-lister
 
       - name: Test Docker image
         run: |
@@ -41,6 +44,8 @@ jobs:
           # Test if the web server responds
           curl -f http://localhost:80/ || exit 1
 
-          # Cleanup
-          docker stop nginx-directory-lister
-          docker rm nginx-directory-lister
+      - name: Cleanup test resources
+        if: always()
+        run: |
+          docker stop nginx-directory-lister || true
+          docker rm nginx-directory-lister || true
