@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     env:
       DOCKER_USERNAME: mggk
       APPLICATION_NAME: nginx-directory-lister
