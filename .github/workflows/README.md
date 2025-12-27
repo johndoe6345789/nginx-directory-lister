@@ -33,26 +33,26 @@ This repository includes two GitHub Actions workflows for automated builds and r
 1. Checks out the code
 2. Sets up QEMU for multi-platform builds
 3. Sets up Docker Buildx
-4. Logs in to Docker Hub
+4. Logs in to GitHub Container Registry (ghcr.io)
 5. Extracts metadata for tagging
 6. Builds and pushes multi-platform images (amd64, arm64)
 
-**Required Secrets:**
-- `DOCKER_USERNAME`: Docker Hub username
-- `DOCKER_PASSWORD`: Docker Hub password or access token
+**Authentication:**
+- Uses the built-in `GITHUB_TOKEN` for authentication
+- No additional secrets required
+- Requires `packages: write` permission
 
 **Tags Generated:**
 - Semantic version tags (e.g., `1.0.0`, `1.0`, `1`)
 - `latest` tag for releases from the default branch
 
+**Image Location:**
+- Images are pushed to: `ghcr.io/<owner>/<repo>`
+- Example: `ghcr.io/johndoe6345789/nginx-directory-lister`
+
 ## Setting Up Secrets
 
-To use the release workflow, configure the following secrets in your repository settings:
-
-1. Go to: Settings → Secrets and variables → Actions
-2. Add the following repository secrets:
-   - `DOCKER_USERNAME`: Your Docker Hub username
-   - `DOCKER_PASSWORD`: Your Docker Hub password or personal access token
+The release workflow uses GitHub's built-in `GITHUB_TOKEN` and does not require any additional secrets to be configured.
 
 ## Manual Release
 
