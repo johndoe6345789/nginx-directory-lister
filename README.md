@@ -12,5 +12,5 @@ This is a simple docker image to expose file listing to the web
 ## Usage
 
 ```sh
-docker run -d -p 80:80 -v /path/to/directory:/usr/share/nginx/html mggk/nginx-directory-lister:latest
+docker run -d -p 80:80 -v /path/to/directory:/usr/share/nginx/html ghcr.io/johndoe6345789/nginx-directory-lister:latest
 ```

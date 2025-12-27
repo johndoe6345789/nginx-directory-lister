@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      DOCKER_USERNAME: mggk
+      APPLICATION_NAME: nginx-directory-lister
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: make build
+
+      - name: Test Docker image
+        run: |
+          # Create test volume directory
+          mkdir -p test_volume
+          echo "Test file" > test_volume/test.txt
+
+          # Run the container
+          docker run -d -p 80:80 -v ./test_volume:/usr/share/nginx/html \
+            --name ${APPLICATION_NAME} ${DOCKER_USERNAME}/${APPLICATION_NAME}:latest
+
+          # Wait for container to be ready
+          sleep 5
+
+          # Test if the container is running
+          docker ps | grep ${APPLICATION_NAME}
+
+          # Test if the web server responds
+          curl -f http://localhost:80/ || exit 1
+
+      - name: Cleanup test resources
+        if: always()
+        run: |
+          docker stop ${APPLICATION_NAME} || true
+          docker rm ${APPLICATION_NAME} || true
